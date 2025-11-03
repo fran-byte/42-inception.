@@ -32,7 +32,7 @@ La cadena de dependencias está definida en
 
 ---
 
-## Bridge Network Configuration
+# Bridge Network Configuration
 
 El sistema define una única red personalizada tipo *bridge* en la configuración de Docker Compose:
 
