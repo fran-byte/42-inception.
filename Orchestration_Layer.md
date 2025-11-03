@@ -263,6 +263,25 @@ El sistema utiliza un certificado X.509 autofirmado para el dominio `frromero.42
 | Certificate  | `secrets/certs/frromero.42.fr.crt`         | `/etc/ssl/certs/frromero.42.fr.crt`             | Certificado público presentado a los clientes |
 | Private Key  | `secrets/certs/frromero.42.fr.key`         | `/etc/ssl/private/frromero.42.fr.key`           | Clave privada para descifrado del certificado |
 
+
+
+
 ---
 
+## WP Runtime Dependencies
+
+### Service Dependencies
+
+El servicio de WordPress tiene dependencias estrictas definidas en la configuración de Docker Compose:
+
+| Dependency              | Type              | Purpose                                                  |
+|-------------------------|-------------------|----------------------------------------------------------|
+| `mariadb`               | Service Dependency| Backend de base de datos para almacenamiento de WordPress|
+| `mariadb_user_password`| Docker Secret     | Credenciales para la conexión a la base de datos         |
+| `wp_manager_password`   | Docker Secret     | Contraseña del usuario administrador                     |
+| `wp_editor_password`    | Docker Secret     | Contraseña del usuario editor                            |
+| `wp` Volume             | Named Volume      | Almacenamiento persistente para archivos de WordPress    |
+| `inception_net`         | Docker Network    | Comunicación con MariaDB y Nginx                         |
+
+---
 
