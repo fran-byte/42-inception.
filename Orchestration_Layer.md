@@ -51,6 +51,18 @@ networks:
 | Scope          | `Local`        | Network exists only on the Docker host               |
 | Internal       | `No`           | Allows external connectivity through port mappings   |
 
+
+
 ---
+
+# Volume Strategy
+
+| Volume Name | Host Path                    | Purpose                  | Sharing                          |
+|-------------|------------------------------|--------------------------|----------------------------------|
+| `db`        | `${PROJECT_ROOT}/data/db`    | MariaDB data files       | Exclusive to MariaDB            |
+| `wp`        | `${PROJECT_ROOT}/data/wp`    | WordPress installation   | Shared: WordPress + Nginx       |
+
+---
+
 
 
