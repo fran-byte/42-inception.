@@ -117,4 +117,23 @@ Las relaciones `depends_on` crean el siguiente orden de inicio:
 | Load Distribution      | Acts as the single gateway for multiple backend services (WordPress, Adminer, Web)                   |
 | DNS Resolution         | Resolves service names to container IPs within the Docker network                                     |
 
+
+
 ---
+
+## Server Block Structure
+
+El archivo `default.conf` define un único bloque de servidor que escucha en el puerto **443** con SSL habilitado:
+
+| Configuration Section   | Purpose                                           |  
+|-------------------------|---------------------------------------------------|
+| `listen` directive      | Binds to port 443 with SSL protocol               |     
+| `server_name`           | Defines the domain name `frromero.42.fr`          |     
+| `ssl_certificate` paths | Points to SSL certificate and private key files   |  
+| `ssl_protocols`         | Restricts to TLSv1.2 and TLSv1.3                  |     
+| `resolver`              | Configures Docker's internal DNS (`127.0.0.11`)   |    
+| `root`                  | Sets document root to `/var/www/html`             |     
+| `location` blocks       | Defines routing rules for different URL paths     |  
+
+---
+
