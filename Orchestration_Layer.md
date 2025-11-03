@@ -251,3 +251,18 @@ location /web/ {
 
 ---
 
+
+## Certificate Configuration
+
+### Certificate Files
+
+El sistema utiliza un certificado X.509 autofirmado para el dominio `frromero.42.fr`. El certificado y la clave privada se almacenan en el sistema anfitrión y se montan en el contenedor de Nginx.
+
+| File         | Host Path                                 | Container Path                                  | Purpose                                      |
+|--------------|--------------------------------------------|--------------------------------------------------|----------------------------------------------|
+| Certificate  | `secrets/certs/frromero.42.fr.crt`         | `/etc/ssl/certs/frromero.42.fr.crt`             | Certificado público presentado a los clientes |
+| Private Key  | `secrets/certs/frromero.42.fr.key`         | `/etc/ssl/private/frromero.42.fr.key`           | Clave privada para descifrado del certificado |
+
+---
+
+
