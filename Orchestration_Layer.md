@@ -105,3 +105,16 @@ Las relaciones `depends_on` crean el siguiente orden de inicio:
 
 ---
 
+
+
+## Nginx Service – Key Responsibilities
+
+| Responsibility         | Description                                                                                           |
+|------------------------|-------------------------------------------------------------------------------------------------------|
+| SSL/TLS Termination    | Accepts encrypted HTTPS connections, decrypts traffic, and forwards requests to backend services over unencrypted internal connections |
+| Reverse Proxy          | Routes requests to appropriate backend services based on URL path patterns                           |
+| Static File Server     | Directly serves static WordPress assets (CSS, JavaScript, images) without proxying to PHP-FPM        |
+| Load Distribution      | Acts as the single gateway for multiple backend services (WordPress, Adminer, Web)                   |
+| DNS Resolution         | Resolves service names to container IPs within the Docker network                                     |
+
+---
