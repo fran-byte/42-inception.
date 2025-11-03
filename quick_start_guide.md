@@ -37,15 +37,7 @@ The following diagram illustrates the complete deployment process from initial s
 
 **Deployment Sequence Diagram**
 
-
----
-
-## File Structure Overview
-
-Before deployment, the project requires specific files and directories to be present:
-
-**Required File Structure Diagram**
-
+![Sequence](img/Deployment_Sequence_Diagram.jpg)
 
 ---
 
@@ -181,13 +173,6 @@ This follows logs from all containers. Key messages to look for:
 
 Navigate to https://frromero.42.fr in a web browser. You will receive a certificate warning (self-signed certificate). Accept and proceed to see the WordPress site.
 
----
-
-## Post-Deployment State
-
-After successful deployment, the system reaches the following state:
-
-**System State After Deployment**
 
 
 ---
