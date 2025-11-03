@@ -32,4 +32,25 @@ La cadena de dependencias está definida en
 
 ---
 
+## Bridge Network Configuration
+
+El sistema define una única red personalizada tipo *bridge* en la configuración de Docker Compose:
+
+```yaml
+networks:
+  inception_net:
+    driver: bridge
+```
+
+### Network Properties
+
+| Property       | Value          | Description                                           |
+|----------------|----------------|-------------------------------------------------------|
+| Network Name   | `inception_net`| Logical name used in service definitions             |
+| Driver Type    | `bridge`       | Docker bridge driver for single-host networking      |
+| Scope          | `Local`        | Network exists only on the Docker host               |
+| Internal       | `No`           | Allows external connectivity through port mappings   |
+
+---
+
 
