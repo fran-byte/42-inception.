@@ -13,9 +13,7 @@ sirve como motor de orquestación, definiendo:
 | Secrets     | Credential injection   | File-based secrets mounted at `/run/secrets/`              |
 | Profiles    | Optional services      | `profiles: [bonus]` for Adminer and Web                    |
 
----
 
-Por supuesto, aquí tienes el contenido formateado en **Markdown**:
 
 ---
 
