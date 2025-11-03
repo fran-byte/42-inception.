@@ -1,7 +1,7 @@
 # Orchestration Layer
 
 **Docker Compose**  
-`(srcs/docker-compose.yml, lines 1–89)`  
+`(srcs/docker-compose.yml)`  
 sirve como motor de orquestación, definiendo:
 
 | Component   | Purpose               | Key Configuration                                           |
