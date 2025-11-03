@@ -338,3 +338,23 @@ El contenedor WordPress se integra con:
 - **Nginx**: recibe peticiones FastCGI en el puerto 9000  
 - **MariaDB**: conexión a `mariadb:3306`  
 - **Docker Secrets**: montados en `/run/secrets/` para credenciales seguras 17
+
+
+---
+
+## Initialization State Summary
+
+La siguiente tabla resume los principales estados de inicialización y sus indicadores:
+
+| **State**              | **Indicator**                                      | **Location**                                                       |
+|------------------------|----------------------------------------------------|---------------------------------------------------------------------|
+| **Volume Empty**       | `ls -A /var/www/html` devuelve vacío               | `srcs/requirements/wordpress/tools/entrypoint.sh` (línea 10)       |
+| **WordPress Downloaded** | Archivos existen en `/var/www/html`             | `srcs/requirements/wordpress/tools/entrypoint.sh` (línea 13)       |
+| **MariaDB Ready**      | `mysql ... SELECT 1;` ejecuta correctamente        | `srcs/requirements/wordpress/tools/entrypoint.sh` (línea 22)       |
+| **WordPress Installed**| `wp core is-installed` sale con código 0          | `srcs/requirements/wordpress/tools/entrypoint.sh` (línea 30)       |
+| **Config Created**     | Existe `/var/www/html/wp-config.php`              | `srcs/requirements/wordpress/tools/entrypoint.sh` (línea 31)       |
+| **Permalinks Set**     | `.htaccess` contiene reglas de reescritura        | `srcs/requirements/wordpress/tools/entrypoint.sh` (línea 50)       |
+| **PHP-FPM Running**    | Proceso escuchando en el puerto 9000              | `srcs/requirements/wordpress/tools/entrypoint.sh` (línea 59)       |
+
+---
+
