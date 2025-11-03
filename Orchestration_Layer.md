@@ -107,7 +107,7 @@ Las relaciones `depends_on` crean el siguiente orden de inicio:
 
 
 
-## Nginx Service – Key Responsibilities
+# Nginx Service – Key Responsibilities
 
 | Responsibility         | Description                                                                                           |
 |------------------------|-------------------------------------------------------------------------------------------------------|
@@ -119,7 +119,7 @@ Las relaciones `depends_on` crean el siguiente orden de inicio:
 
 
 
----
+
 
 ## Server Block Structure
 
