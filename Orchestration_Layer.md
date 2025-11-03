@@ -167,3 +167,87 @@ El destino `wordpress:9000` utiliza la resolución de servicios de Docker para o
 
 ---
 
+
+## Adminer Proxy Location (`/adminer`)
+
+El bloque `location` para Adminer implementa un proxy inverso HTTP hacia el servicio de gestión de bases de datos incluido en el perfil *bonus*:
+
+```nginx
+location /adminer {
+    set $adminer_upstream adminer:8090;
+    proxy_pass http://$adminer_upstream;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_redirect off;
+    proxy_intercept_errors on;
+    error_page 502 503 504 =404 /404.html;
+}
+```
+
+### Key Implementation Details
+
+- **Variable Assignment (línea 38)**:  
+  `set $adminer_upstream adminer:8090;` asigna el destino upstream a una variable. Este patrón evita que Nginx falle al iniciar si el servicio Adminer no está disponible (cuando el perfil *bonus* no está activado).
+
+- **Proxy Headers (líneas 40–43)**:  
+  Configuran cabeceras estándar de proxy inverso para preservar la información original del cliente:
+  - `Host`: mantiene la cabecera original del host
+  - `X-Real-IP`: pasa la IP real del cliente
+  - `X-Forwarded-For`: cadena de IPs de proxy
+  - `X-Forwarded-Proto`: protocolo original (https)
+
+- **Error Handling (líneas 45–46)**:  
+  Intercepta errores del upstream (`502`, `503`, `504`) y los convierte en respuestas `404`, proporcionando una degradación elegante cuando Adminer no está disponible.
+
+
+
+---
+
+## Static Web Proxy Location (`/web/`)
+
+El bloque `location` para el servidor web estático implementa un proxy inverso hacia el servicio HTML incluido en el perfil *bonus*:
+
+```nginx
+location /web/ {
+    set $web_upstream web:8080;
+    proxy_pass http://$web_upstream/;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_redirect off;
+    proxy_set_header X-Forwarded-Ssl on;
+    proxy_set_header X-Url-Scheme https;
+    proxy_intercept_errors on;
+    error_page 502 503 504 =404 /404.html;
+}
+```
+
+### Notable Differences from Adminer Configuration
+
+- **Trailing Slash en `proxy_pass` (línea 52)**:  
+  La URI `http://$web_upstream/` incluye una barra final, lo que indica a Nginx que elimine el prefijo `/web/` al reenviar la solicitud.  
+  Por ejemplo, una solicitud a `/web/about.html` se reenvía como `/about.html` al upstream.
+
+- **Cabeceras SSL adicionales (líneas 58–59)**:  
+  Se establecen las cabeceras `X-Forwarded-Ssl` y `X-Url-Scheme` para indicar explícitamente que la solicitud original usó HTTPS.
+
+- **Manejo de errores similar**:  
+  Coincide con el patrón de degradación elegante de Adminer para servicios *bonus* no disponibles.
+
+---
+
+
+## Configuration Summary Table
+
+| Location Pattern | Match Type        | Backend Target | Protocol     | Port | Purpose                    |
+|------------------|-------------------|----------------|--------------|------|----------------------------|
+| `~ \.php$`       | Regular Expression| `wordpress`    | FastCGI      | 9000 | PHP script processing      |
+| `/adminer`       | Prefix            | `adminer`      | HTTP Proxy   | 8090 | Database management UI     |
+| `/web/`          | Prefix            | `web`          | HTTP Proxy   | 8080 | Static HTML content        |
+| `/`              | Prefix            | N/A (`try_files`) | Static/FastCGI | N/A  | WordPress application root |
+
+---
+
