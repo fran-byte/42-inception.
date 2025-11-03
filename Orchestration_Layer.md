@@ -135,5 +135,35 @@ El archivo `default.conf` define un único bloque de servidor que escucha en el 
 | `root`                  | Sets document root to `/var/www/html`             |     
 | `location` blocks       | Defines routing rules for different URL paths     |  
 
+
+---
+
+## PHP Processing Location (`~ \.php$`)
+
+Este bloque `location` usa una expresión regular para hacer coincidir todas las solicitudes de archivos PHP:
+
+```nginx
+location ~ \.php$ {
+    fastcgi_split_path_info ^(.+\.php)(/.+)$;
+    fastcgi_pass wordpress:9000;
+    fastcgi_index index.php;
+    include fastcgi_params;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    fastcgi_param PATH_INFO $fastcgi_path_info;
+}
+```
+
+### Configuration Elements
+
+| Directive                     | Purpose                                                                 |
+|-------------------------------|-------------------------------------------------------------------------|
+| `fastcgi_split_path_info`     | Parsea la URI para extraer el nombre del script PHP y la información de ruta |
+| `fastcgi_pass wordpress:9000` | Redirige la solicitud al PHP-FPM del contenedor WordPress en el puerto 9000 |
+| `fastcgi_index`               | Archivo por defecto cuando se solicita un directorio                   |
+| `fastcgi_param SCRIPT_FILENAME` | Establece la ruta absoluta al script PHP                             |
+| `fastcgi_param PATH_INFO`     | Pasa la información de ruta a la aplicación PHP                        |
+
+El destino `wordpress:9000` utiliza la resolución de servicios de Docker para obtener la IP del contenedor de WordPress. PHP-FPM escucha en el puerto 9000 dentro del contenedor, recibiendo solicitudes mediante el protocolo FastCGI.
+
 ---
 
