@@ -285,3 +285,56 @@ El servicio de WordPress tiene dependencias estrictas definidas en la configurac
 
 ---
 
+
+## Resumen del WordPress Container Build
+
+### Tabla de resumen
+
+| **Aspecto**                     | **Detalles**                                                                 |
+|----------------------------------|------------------------------------------------------------------------------|
+| **Imagen Base**                 | `alpine:3.21` 1                                                      |
+| **PHP y Extensiones**          | PHP 8.3 con FPM, mysqli, curl, dom, json, mbstring, xml, zip, phar, session, openssl, tokenizer 2 |
+| **Utilidades**                 | `wget`, `curl`, `mariadb-client` 3                                   |
+| **Directorios Creados**        | `/var/www/html` (WordPress), `/run/php` (PHP-FPM socket) 4           |
+| **Descarga WordPress**         | Descarga `latest.tar.gz` desde wordpress.org y extrae a `/var/www/html` 5 |
+| **Permisos**                   | Usuario: `nobody:nobody`, Directorios: 755, Archivos: 644 6          |
+| **Configuración PHP-FPM**      | Copia `www.conf` a `/etc/php83/php-fpm.d/` 7                          |
+| **Scripts de Inicialización**  | `install.sh`, `entrypoint.sh`, `init-users.php` copiados a `/usr/local/bin/` 8 |
+| **Puerto Expuesto**            | 9000 (FastCGI) 9                                                      |
+| **Entrypoint**                 | `/usr/local/bin/entrypoint.sh` 10                                    |
+| **Workdir**                    | `/var/www/html` 11                                                  |
+
+---
+
+### Comandos de Build
+
+| **Comando**             | **Descripción**                                 |
+|-------------------------|--------------------------------------------------|
+| `make build`            | Build estándar con caché 12            |
+| `make rebuild`          | Build sin caché + deploy 13            |
+| `make mandatory-up`     | Build + deploy servicios obligatorios 14|
+
+---
+
+### Proceso de Inicialización (`entrypoint.sh`)
+
+El script `entrypoint.sh` ejecuta la siguiente secuencia: 15
+
+1. Establece permisos en `/var/www/html`  
+2. Descarga WordPress si el volumen está vacío  
+3. Espera conexión a MariaDB (máximo 15 intentos)  
+4. Crea `wp-config.php` con credenciales de base de datos  
+5. Instala WordPress core con WP-CLI  
+6. Configura permalinks  
+7. Ejecuta `init-users.php` para crear usuarios adicionales  
+8. Inicia `php-fpm83 -F` en foreground  
+
+---
+
+### Notas
+
+El contenedor WordPress se integra con:
+
+- **Nginx**: recibe peticiones FastCGI en el puerto 9000  
+- **MariaDB**: conexión a `mariadb:3306`  
+- **Docker Secrets**: montados en `/run/secrets/` para credenciales seguras 17
