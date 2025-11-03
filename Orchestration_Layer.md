@@ -65,4 +65,43 @@ networks:
 ---
 
 
+# Service Stack Architecture
+
+Los tres servicios principales implementan una arquitectura clásica de aplicación web en tres capas, cada uno ejecutándose en su propio contenedor basado en Alpine Linux:
+
+| Service   | Container Name | Base Image   | Primary Role                                         | Exposed Port         |
+|-----------|----------------|--------------|------------------------------------------------------|----------------------|
+| Nginx     | `nginx`        | `alpine:3.21`| SSL termination, reverse proxy, static file serving  | 443 (HTTPS)          |
+| WordPress | `wordpress`    | `alpine:3.21`| PHP-FPM application server, WordPress core           | 9000 (FastCGI)       |
+| MariaDB   | `mariadb`      | `alpine:3.21`| MySQL-compatible database server                     | 3306 (MySQL protocol)|
+
+
+---
+
+# Dependency Chain
+
+Las relaciones `depends_on` crean el siguiente orden de inicio:
+
+### **MariaDB (`mariadb`)**: *Starts first with no dependencies*
+- Inicializa el almacenamiento de la base de datos en `/var/lib/mysql`
+- Crea la base de datos de WordPress y las cuentas de usuario
+- Comienza a aceptar conexiones en el puerto **3306**
+
+---
+
+### **WordPress (`wordpress`)**: *Starts after MariaDB*
+- Espera a que MariaDB esté aceptando conexiones
+- Descarga y configura los archivos core de WordPress
+- Realiza la instalación del esquema de base de datos
+- Crea los usuarios administrador y editor de WordPress
+- Inicia PHP-FPM escuchando en el puerto **9000**
+
+---
+
+### **Nginx (`nginx`)**: *Starts last after WordPress*
+- Carga los certificados SSL desde `/etc/ssl/certs/` y `/etc/ssl/private/`
+- Configura el proxy FastCGI hacia `wordpress:9000`
+- Comienza a servir tráfico HTTPS en el puerto **443**
+
+---
 
