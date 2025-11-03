@@ -3,18 +3,14 @@
 |--------------------------|------------------------------------------------------------------|
 | Servicios obligatorios   | `docker compose up --build -d mariadb wordpress nginx`          |
 | Con servicios bonus      | `docker compose --profile bonus up --build -d`                  |
-|--------------------------|------------------------------------------|
 | Todos los servicios      | `docker compose stop`                   |
 | Servicio específico      | `docker compose stop mariadb`           |
-|--------------------------|--------------------------------------------------|
 | Todos en tiempo real     | `docker compose logs --follow`                 |
 | Servicio específico      | `docker compose logs mariadb`                  |
 | Últimas N líneas         | `docker compose logs --tail=50 wordpress`      |
-|--------------------------|--------------------------------------------------|
 | Con caché                | `docker compose build`                         |
 | Sin caché                | `docker compose build --no-cache`              |
 | Servicio específico      | `docker compose build --no-cache mariadb`      |                     |
-|--------------------------|------------------------------------------------------------------|
 | Parar y eliminar         | `docker compose down --remove-orphans`                          |
 | Con bonus                | `docker compose --profile bonus down --remove-orphans`          |
 
@@ -26,10 +22,8 @@
 | **Arrancar servicios** | `make mandatory-up`              |
 | **Parar servicios**    | `make stop`                      |
 | **Reiniciar**          | `make restart`                   |
-|------------------------|---------------------------|
 | **Ver logs**           | `make logs`               |
 | **Ver contenedores**   | `docker ps`               |
-|------------------------|---------------------------|
 | **Rebuild sin caché**  | `make rebuild`            |
 | **Build con caché**    | `make build`              |
 
