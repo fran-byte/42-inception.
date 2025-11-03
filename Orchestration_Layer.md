@@ -15,3 +15,23 @@ sirve como motor de orquestación, definiendo:
 
 ---
 
+Por supuesto, aquí tienes el contenido formateado en **Markdown**:
+
+---
+
+# Dependency Order
+
+La cadena de dependencias está definida en  
+`srcs/docker-compose.yml`
+
+| Service   | Depends On | Startup Position | Rationale                                           |
+|-----------|------------|------------------|-----------------------------------------------------|
+| mariadb   | None       | First            | Database must be ready before WordPress            |
+| wordpress | mariadb    | Second           | Requires database connection for initialization    |
+| nginx     | wordpress  | Third            | Requires WordPress PHP-FPM to be listening         |
+| adminer   | None (implicit) | Parallel     | Connects to database at runtime                    |
+| web       | None       | Parallel         | Independent static content server                  |
+
+---
+
+
