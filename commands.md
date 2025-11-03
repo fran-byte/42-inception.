@@ -15,8 +15,6 @@
 | Con bonus                | `docker compose --profile bonus down --remove-orphans`          |
 
 
-### 🛠️ Acciones principales
-
 | **Acción**         | **Comando**                          |
 |--------------------|--------------------------------------|
 | **Arrancar servicios** | `make mandatory-up`              |
@@ -35,7 +33,6 @@
 
 
 
-### 🗄️ Base de datos
 
 | **Acción**                     | **Comando**                                      |
 |--------------------------------|--------------------------------------------------|
@@ -43,8 +40,6 @@
 | **Ver bases de datos**         | `SHOW DATABASES;`                                |
 | **Ver tablas**                 | `USE wordpress; SHOW TABLES;`                    |
 | **Ver usuarios de WordPress** | `SELECT user_login, user_email FROM wp_users;`   |
-
-
 
 
 ## ⚡ Secuencia Rápida de Evaluación
